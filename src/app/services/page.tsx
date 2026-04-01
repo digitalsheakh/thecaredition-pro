@@ -177,7 +177,7 @@ export default function ServicesPage() {
                         </p>
                         
                         <div className="inline-flex items-center text-orange-400 hover:text-orange-300 font-orbitron font-semibold uppercase tracking-wide text-sm transition-colors duration-300">
-                          WATCH VIDEO
+                          LEARN MORE
                           <FaArrowRight className="text-white group-hover:translate-x-1 transition-transform" />
                         </div>
                       </div>
