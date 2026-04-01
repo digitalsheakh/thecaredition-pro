@@ -24,6 +24,18 @@ const videosCollection = await dbConnect<Admission>(collections.videos);
 
 // GET — fetch admission by ID with related data
 export async function GET(req: NextRequest) {
+  const referer = req.headers.get('referer') || '';
+  const refererPath = new URL(referer).pathname;
+  
+  // Pass referer path to authorization check
+  const authResult = await authorizationCheck(refererPath);
+  
+  if (!authResult.success) {
+    return NextResponse.json(
+      { error: authResult.error },
+      { status: authResult.status }
+    );
+  }
 
   try {
     const id = req.nextUrl.pathname.split("/").pop();
@@ -33,7 +45,6 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(video, { status: 200 });
   
-
 
   } catch (error) {
     console.error("Error fetching admission with related data:", error);

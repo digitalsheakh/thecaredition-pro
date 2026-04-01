@@ -4,6 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios, { AxiosError } from "axios";
+import { useSession } from "next-auth/react";
 
 interface AdminFormData {
   name: string;
@@ -19,6 +20,7 @@ interface PasswordFormData {
 }
 
 const Settings = () => {
+  const { data: session, status } = useSession();
   const [isEditMode, setIsEditMode] = useState(false);
   const { register: profileRegister, handleSubmit: handleProfileSubmit, setValue: setProfileValue, formState: { errors: profileErrors } } = useForm<AdminFormData>();
   const { register: passwordRegister, handleSubmit: handlePasswordSubmit, formState: { errors: passwordErrors }, reset: resetPasswordForm } = useForm<PasswordFormData>();
@@ -36,14 +38,21 @@ const Settings = () => {
 
   useEffect(() => {
     const fetchAdminData = async () => {
+      if (status === "loading") return; // Don't fetch if session is loading
+      if (!session?.user?.id) {
+        console.error("No user session found");
+        setIsLoading(false);
+        return;
+      }
+
       try {
-        const res = await axios.get(`/api/users/6856cf42f58b92803e13931b`);
+        const res = await axios.get(`/api/users/${session.user.id}`);
         const adminData = res.data;
         
         setProfileValue("name", adminData.name);
         setProfileValue("mobile", adminData.mobile);
         setProfileValue("email", adminData.email);
-        setAdminPhoto(adminData.profilePhoto);
+        setAdminPhoto(adminData.profilePhoto || adminData.adminPhoto);
         
         setIsLoading(false);
       } catch (error) {
@@ -53,12 +62,17 @@ const Settings = () => {
     };
 
     fetchAdminData();
-  }, [setProfileValue]);
+  }, [session, status, setProfileValue]);
 
   const onSubmitProfile = async (data: AdminFormData) => {
+    if (!session?.user?.id) {
+      toast.error("User session not found");
+      return;
+    }
+
     setLoadingProfile(true);
     try {
-      await axios.put(`/api/users/6856cf42f58b92803e13931b`, {
+      await axios.put(`/api/users/${session.user.id}`, {
         name: data.name,
         mobile: data.mobile,
         email: data.email,
@@ -75,6 +89,11 @@ const Settings = () => {
   };
 
   const onSubmitPassword = async (data: PasswordFormData) => {
+    if (!session?.user?.id) {
+      toast.error("User session not found");
+      return;
+    }
+
     if (data.newPassword !== data.confirmPassword) {
       toast.error("New passwords do not match");
       return;
@@ -82,7 +101,7 @@ const Settings = () => {
 
     setLoadingPassword(true);
     try {
-      await axios.put(`/api/users/6856cf42f58b92803e13931b/password`, {
+      await axios.put(`/api/users/${session.user.id}/password`, {
         currentPassword: data.currentPassword,
         newPassword: data.newPassword
       });
@@ -107,12 +126,22 @@ const Settings = () => {
     }
   };
 
-  if (isLoading) {
+  if (status === "loading" || isLoading) {
     return (
       <div className="bg-white rounded-xl shadow-sm border border-gray-200">
         <div className="flex flex-col justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-4 border-orange-600 border-t-transparent mb-4"></div>
           <p className="text-gray-600 font-rajdhani">Loading system settings...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!session) {
+    return (
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="flex flex-col justify-center items-center h-64">
+          <p className="text-red-600 font-rajdhani">Please sign in to access system settings</p>
         </div>
       </div>
     );

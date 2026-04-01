@@ -202,7 +202,7 @@ export default function VideosPage() {
                 <div className="p-4">
                   <h4 className="text-white font-rajdhani font-bold text-base mb-2 group-hover:text-orange-600 transition-colors line-clamp-2">EP 1: Workshop Stories & Automotive Insights</h4>
                   <div className="flex items-center justify-between mt-3">
-                    <span className="text-[#FF0000] font-rajdhani text-xs font-bold uppercase flex items-center">
+                    <span className="text-orange-500 font-rajdhani text-xs font-bold uppercase flex items-center">
                       <FaYoutube className="mr-1" />
                       Listen Now
                     </span>
@@ -234,7 +234,7 @@ export default function VideosPage() {
                 <div className="p-4">
                   <h4 className="text-white font-rajdhani font-bold text-base mb-2 group-hover:text-orange-600 transition-colors line-clamp-2">EP 2: Behind The Scenes at The Car Edition</h4>
                   <div className="flex items-center justify-between mt-3">
-                    <span className="text-[#FF0000] font-rajdhani text-xs font-bold uppercase flex items-center">
+                    <span className="text-orange-500 font-rajdhani text-xs font-bold uppercase flex items-center">
                       <FaYoutube className="mr-1" />
                       Listen Now
                     </span>
@@ -266,7 +266,7 @@ export default function VideosPage() {
                 <div className="p-4">
                   <h4 className="text-white font-rajdhani font-bold text-base mb-2 group-hover:text-orange-600 transition-colors line-clamp-2">EP 3: Diagnostic Deep Dive & Tech Talk</h4>
                   <div className="flex items-center justify-between mt-3">
-                    <span className="text-[#FF0000] font-rajdhani text-xs font-bold uppercase flex items-center">
+                    <span className="text-orange-500 font-rajdhani text-xs font-bold uppercase flex items-center">
                       <FaYoutube className="mr-1" />
                       Listen Now
                     </span>
@@ -298,7 +298,7 @@ export default function VideosPage() {
                 <div className="p-4">
                   <h4 className="text-white font-rajdhani font-bold text-base mb-2 group-hover:text-orange-600 transition-colors line-clamp-2">EP 4: Expert Tips & Common Car Issues</h4>
                   <div className="flex items-center justify-between mt-3">
-                    <span className="text-[#FF0000] font-rajdhani text-xs font-bold uppercase flex items-center">
+                    <span className="text-orange-500 font-rajdhani text-xs font-bold uppercase flex items-center">
                       <FaYoutube className="mr-1" />
                       Listen Now
                     </span>
@@ -386,7 +386,7 @@ export default function VideosPage() {
                     <div className="p-4">
                       <h4 className="text-white font-rajdhani font-bold text-base mb-2 group-hover:text-orange-600 transition-colors line-clamp-2">{video.title}</h4>
                       <div className="flex items-center justify-between mt-3">
-                        <span className="text-[#FF0000] font-rajdhani text-xs font-bold uppercase flex items-center">
+                        <span className="text-orange-500 font-rajdhani text-xs font-bold uppercase flex items-center">
                           <FaYoutube className="mr-1" />
                           Watch Now
                         </span>

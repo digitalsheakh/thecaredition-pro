@@ -196,7 +196,7 @@ export default function ServiceTabs() {
                   <button
                     key={service.id}
                     onClick={() => handleTabChange(service.id)}
-                    className={`text-left py-2 text-white hover:text-[#ff0000] transition-colors relative ${activeTab === service.id ? 'font-bold' : ''}`}
+                    className={`text-left py-2 text-white hover:text-orange-500 transition-colors relative ${activeTab === service.id ? 'font-bold' : ''}`}
                   >
                     <span className="text-base italic">{service.title}</span>
                     {activeTab === service.id && (

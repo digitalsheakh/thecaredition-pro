@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import{ dbConnect,  collections } from "@/lib/dbConnect";
+import { dbConnect, collections } from "@/lib/dbConnect";
 import { NextRequest, NextResponse } from "next/server";
 import { authorizationCheck } from "@/lib/authorization";
 
@@ -16,8 +16,8 @@ interface User extends Document {
   oldPasswords?: string[];
 }
 
-// PATCH — update user password
-export async function PATCH(req: NextRequest) {
+// PUT — update user password
+export async function PUT(req: NextRequest) {
   const referer = req.headers.get('referer') || '';
   const refererPath = new URL(referer).pathname;
   
@@ -32,7 +32,7 @@ export async function PATCH(req: NextRequest) {
   }
   try {
     const usersCollection = await dbConnect<User>(collections.users);
-    const id = req.nextUrl.pathname.split("/").pop();
+    const id = req.nextUrl.pathname.split("/").slice(-2)[0]; // Get [id] from /api/users/[id]/password
 
     if (!id || !ObjectId.isValid(id)) {
       return NextResponse.json({ error: "Invalid ID format" }, { status: 400 });
@@ -99,5 +99,3 @@ export async function PATCH(req: NextRequest) {
     }, { status: 500 });
   }
 }
-
-

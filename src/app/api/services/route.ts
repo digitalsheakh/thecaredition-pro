@@ -32,6 +32,19 @@ export async function POST(req :NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
+  const referer = req.headers.get('referer') || '';
+  const refererPath = new URL(referer).pathname;
+  
+  // Pass referer path to authorization check
+  const authResult = await authorizationCheck(refererPath);
+  
+  if (!authResult.success) {
+    return NextResponse.json(
+      { error: authResult.error },
+      { status: authResult.status }
+    );
+  }
+
   try {
     // TODO: Re-enable database connection after deployment
     // const servicesCollection = await dbConnect(collections.services);

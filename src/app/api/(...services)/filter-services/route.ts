@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { collections, dbConnect } from "@/lib/dbConnect";
 import { ObjectId } from "mongodb";
+import { authorizationCheck } from "@/lib/authorization";
 
 interface Service extends Document {
   _id: ObjectId;
@@ -13,6 +14,19 @@ interface Service extends Document {
 
 
 export async function GET(req: NextRequest) {
+  const referer = req.headers.get('referer') || '';
+  const refererPath = new URL(referer).pathname;
+  
+  // Pass referer path to authorization check
+  const authResult = await authorizationCheck(refererPath);
+  
+  if (!authResult.success) {
+    return NextResponse.json(
+      { error: authResult.error },
+      { status: authResult.status }
+    );
+  }
+
   try {
     const { searchParams } = new URL(req.url);
     const searchTerm = searchParams.get("search") || "";

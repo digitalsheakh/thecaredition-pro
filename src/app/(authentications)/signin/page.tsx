@@ -34,14 +34,14 @@ function LoginPage() {
 
   const onSubmit = async (data: FormData) => {
     setLoading(true);
-    setError("");
+    // setError("");
 
-    // Show "under construction" message
-    setError("Dashboard is currently under construction. Please check back soon!");
-    setLoading(false);
+    // // Show "under construction" message
+    // setError("Dashboard is currently under construction. Please check back soon!");
+    // setLoading(false);
     
     // Commented out actual login logic for now
-    /*
+  
     try {
       const res = await signIn("credentials", {
         email: data.email,
@@ -58,7 +58,7 @@ function LoginPage() {
       setError("An unexpected error occurred");
       setLoading(false);
     }
-    */
+    
   };
 
   return (
