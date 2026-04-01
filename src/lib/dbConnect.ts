@@ -7,7 +7,6 @@ const collections = {
   blogs: "blogs",
   videos: "videos",
   shops: "shops",
-  chatLeads: "chat-leads",
 };
 
 // Global variable to store the client

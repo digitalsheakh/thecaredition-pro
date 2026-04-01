@@ -246,9 +246,6 @@ export default function ServiceTabs() {
                   <Link href="/service-estimator" className="bg-[#ff0000] hover:bg-[#cc0000] text-white px-4 py-1.5 text-sm font-medium transition-colors duration-200 text-center">
                     Book Now
                   </Link>
-                  <button className="border border-white hover:border-[#ff0000] text-white hover:text-[#ff0000] px-4 py-1.5 text-sm font-medium transition-colors duration-200">
-                    Chat With Us
-                  </button>
                 </div>
               </div>
             </div>
