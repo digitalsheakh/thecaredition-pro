@@ -4,8 +4,6 @@ import { authorizationCheck } from "@/lib/authorization";
 import { collections, dbConnect } from "@/lib/dbConnect";
 import { NextRequest, NextResponse } from "next/server";
 
-const shopsCollection = await dbConnect(collections.shops);
-
 export async function POST(req :NextRequest) {
   const referer = req.headers.get('referer') || '';
   const refererPath = new URL(referer).pathname;
@@ -20,6 +18,7 @@ export async function POST(req :NextRequest) {
     );
   }
   try {
+    const shopsCollection = await dbConnect(collections.shops);
     const formInfo = await req.json();
     const shopCount = await shopsCollection.countDocuments()
     const result = await shopsCollection.insertOne({ ...formInfo, createdAt : new Date(), productNumber : `CE${shopCount + 1 < 10 && `0`}${shopCount+1}` });
@@ -31,8 +30,8 @@ export async function POST(req :NextRequest) {
 }
 
 export async function GET() {
-
   try {
+    const shopsCollection = await dbConnect(collections.shops);
     const result = await shopsCollection.find({}).sort({ createdAt: 1 }).toArray();
     return NextResponse.json(result);
   } catch (error) {

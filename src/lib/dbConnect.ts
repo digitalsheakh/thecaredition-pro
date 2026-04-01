@@ -12,13 +12,18 @@ const collections = {
 
 // Global variable to store the client
 let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
+let clientPromise: Promise<MongoClient> | undefined;
 
-const uri = process.env.NEXT_PUBLIC_MONGODB_URI!;
-const dbName = process.env.MONGODB_NAME!;
+const uri = process.env.NEXT_PUBLIC_MONGODB_URI || process.env.MONGODB_URI;
+const dbName = process.env.MONGODB_NAME || process.env.MONGODB_DB_NAME || "thecaredition";
 
-if (!uri) throw new Error("MongoDB URI is not defined in environment variables");
-if (!dbName) throw new Error("MongoDB name is not defined");
+// Don't throw errors during build time
+if (process.env.NODE_ENV !== 'production' && !uri) {
+  console.warn("MongoDB URI is not defined in environment variables");
+}
+if (process.env.NODE_ENV !== 'production' && !dbName) {
+  console.warn("MongoDB name is not defined, using default");
+}
 
 // Extend the global object to include _mongoClientPromise
 declare global {
@@ -26,7 +31,7 @@ declare global {
   var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 
-if (!global._mongoClientPromise) {
+if (!global._mongoClientPromise && uri) {
   client = new MongoClient(uri, {
     serverApi: {
       version: ServerApiVersion.v1,
@@ -39,6 +44,9 @@ if (!global._mongoClientPromise) {
 clientPromise = global._mongoClientPromise;
 
 async function dbConnect<T extends Document = Document>(collectionName: string): Promise<Collection<T>> {
+  if (!clientPromise) {
+    throw new Error("Database connection not initialized");
+  }
   const client = await clientPromise;
   return client.db(dbName).collection<T>(collectionName);
 }

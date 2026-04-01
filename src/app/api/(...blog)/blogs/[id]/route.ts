@@ -19,9 +19,23 @@ interface Blog {
 // GET — fetch blog by ID
 export async function GET(req: NextRequest) {
   try {
+    // Handle build-time execution
+    if (process.env.NODE_ENV === 'production' && !process.env.MONGODB_URI && !process.env.NEXT_PUBLIC_MONGODB_URI) {
+      return NextResponse.json({ error: "Database not configured" }, { status: 503 });
+    }
+
     const blogsCollection = await dbConnect(collections.blogs);
     const id = req.nextUrl.pathname.split("/").pop();
+    
+    if (!id || !ObjectId.isValid(id)) {
+      return NextResponse.json({ error: "Invalid ID format" }, { status: 400 });
+    }
+
     const blog = await blogsCollection.findOne({ _id: new ObjectId(id) });
+
+    if (!blog) {
+      return NextResponse.json({ error: "Blog not found" }, { status: 404 });
+    }
 
     return NextResponse.json(blog, { status: 200 });
 
